@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arshu Run</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: sans-serif; }
+    #usernameInput {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      z-index: 5;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="usernameInput">
+    <label>Enter Username:</label><br>
+    <input type="text" id="username" />
+    <button onclick="startGame()">Start</button>
+  </div>
+  <div id="hud">Arshu</div>
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three';
+
+    let camera, scene, renderer, cube, usernameDiv;
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+
+      camera.position.z = 5;
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      cube.position.z -= 0.05;
+      renderer.render(scene, camera);
+    }
+
+    window.startGame = () => {
+      document.getElementById('usernameInput').style.display = 'none';
+      init();
+    };
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
